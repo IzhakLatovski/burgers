@@ -1,0 +1,41 @@
+name: Save Burger Order
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: "Customer's Name"
+        required: true
+        type: string
+      toppings:
+        description: "Selected Toppings"
+        required: true
+        type: string
+
+jobs:
+  save_order:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Add new order to orders.json
+        run: |
+          if [ ! -f orders.json ]; then
+            echo '[]' > orders.json
+          fi
+          new_order='{"name": "'"${{ github.event.inputs.name }}"'", "toppings": '"${{ github.event.inputs.toppings }}"', "date": "'"$(date)"'"}'
+          orders=$(jq '. += ['"$new_order"']' orders.json)
+          echo "$orders" > orders.json
+
+      - name: Commit and push
+        run: |
+          git config --global user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git add orders.json
+          git commit -m "New burger order added"
+          git push
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.BURGERS_TOKEN }}
