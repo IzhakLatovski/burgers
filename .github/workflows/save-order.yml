@@ -38,4 +38,4 @@ jobs:
           git push
 
     env:
-      GITHUB_TOKEN: ${{ secrets.BURGERS_TOKEN }}
+      GITHUB_TOKEN: ${{ secrets.BURGERS_TOKEN }}  # This secret token will be fetched automatically from your GitHub Secrets.
