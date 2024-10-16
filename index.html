@@ -101,13 +101,6 @@
             text-align: center;
             margin-top: 10px;
         }
-
-        /* Media query for smaller screens */
-        @media (max-width: 600px) {
-            .topping {
-                width: 48%; /* Make the topping divs slightly smaller */
-            }
-        }
     </style>
 </head>
 <body>
@@ -165,33 +158,32 @@
             <div class="topping" data-topping="pickles">
                 <img src="https://www.wellplated.com/wp-content/uploads/2017/07/Teriyaki-Burgers-with-Grilled-Pineapple-recipe.jpg" alt="Pickles">
                 <div>Ананас</div>
-                <input type="checkbox" name="topping" value="pineapple">
+                <input type="checkbox" name="topping" value="ananas">
             </div>
         </div>
 
-        <input type="text" id="nameInput" name="nameInput" placeholder="Введите ваше имя" required>
-        <button type="submit">Отправить</button>
+        <button type="submit">Отправить Ицику</button>
         <div class="message" id="message"></div>
-    </form>
+    </form> 
 </div>
 
 <script>
-    const toppings = document.querySelectorAll('.topping');
-    toppings.forEach(topping => {
-        topping.addEventListener('click', () => {
-            topping.classList.toggle('selected');
-            const input = topping.querySelector('input');
-            input.checked = !input.checked; // Toggle the checkbox state
+    document.querySelectorAll('.topping').forEach(topping => {
+        topping.addEventListener('click', function() {
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            checkbox.checked = !checkbox.checked;
+            this.classList.toggle('selected', checkbox.checked);
         });
     });
 
     const form = document.getElementById('burgerForm');
+    const messageDiv = document.getElementById('message');
+
     form.addEventListener('submit', async (e) => {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault();  // Prevent default form submission
 
         const formData = new FormData(form);
-        const messageDiv = document.getElementById('message');
-
+        
         try {
             const response = await fetch('https://formspree.io/f/xkgnnpav', {
                 method: 'POST',
